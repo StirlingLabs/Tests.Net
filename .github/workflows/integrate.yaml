@@ -1,5 +1,4 @@
 name: Integration
-# Note requirements below.
 
 on:
   push:
