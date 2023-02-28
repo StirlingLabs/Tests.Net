@@ -6,7 +6,8 @@
         <Nullable>enable</Nullable>
 
         <IsPackable>false</IsPackable>
-        <RuntimeIdentifier>$(NETCoreSdkRuntimeIdentifier)</RuntimeIdentifier>
+        <RuntimeIdentifier>$(NETCoreSdkPortableRuntimeIdentifier)</RuntimeIdentifier>
+        <RuntimeIdentifier Condition="'$(RuntimeIdentifier)'==''">$(NETCoreSdkRuntimeIdentifier)</RuntimeIdentifier>
         <RuntimeIdentifier Condition="'$(RuntimeIdentifier)'==''">$([System.Runtime.InteropServices.RuntimeInformation]::RuntimeIdentifier)</RuntimeIdentifier>
     </PropertyGroup>
 
@@ -19,7 +20,7 @@
         <ProjectReference Include="..\StirlingLabs.Tests\StirlingLabs.Tests.csproj" />
     </ItemGroup>
 
-    <ItemGroup Condition="'$(CI)'!='' And '$(RID)'==''">
+    <ItemGroup Condition="'$(CI)'!=''">
         <PackageReference Include="GitHubActionsTestLogger" Version="2.0.1" PrivateAssets="All" />
     </ItemGroup>
 </Project>
