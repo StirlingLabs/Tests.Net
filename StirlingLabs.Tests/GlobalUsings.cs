@@ -1,0 +1,11 @@
+global using System.ComponentModel;
+global using System.Diagnostics;
+global using System.Reflection;
+global using System.Runtime.InteropServices;
+global using System.Runtime.Loader;
+global using System.Text.RegularExpressions;
+global using System.Collections.ObjectModel;
+global using Microsoft.VisualStudio.TestPlatform.ObjectModel;
+global using Microsoft.VisualStudio.TestPlatform.ObjectModel.Adapter;
+global using Microsoft.VisualStudio.TestPlatform.ObjectModel.Logging;
+global using JetBrains.Annotations;
