@@ -1,4 +1,5 @@
-﻿# StirlingLabs.Tests
+﻿# ![StirlingLabs.Tests](./Tests.Net.jpg)
+
 
 StirlingLabs.Tests is a lightweight test framework built for simplicity. It's designed to be easy to use, with a minimalistic approach to testing that focuses on simplicity and ease-of-use.
 
