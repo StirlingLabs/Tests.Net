@@ -17,4 +17,8 @@
         <PackageReference Include="Microsoft.TestPlatform.ObjectModel" Version="17.4.1" />
     </ItemGroup>
 
+    <ImportGroup>
+        <Import Project="../Version.proj" />
+    </ImportGroup>
+
 </Project>
