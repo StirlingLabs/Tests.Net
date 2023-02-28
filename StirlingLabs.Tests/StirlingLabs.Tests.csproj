@@ -8,6 +8,8 @@
         <OutputType>Library</OutputType>
         <AssemblyName>StirlingLabs.TestAdapter</AssemblyName>
         <Configuration>Release</Configuration>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <PackageOutputPath>../artifacts</PackageOutputPath>
     </PropertyGroup>
 
     <ItemGroup>

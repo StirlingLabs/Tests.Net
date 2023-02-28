@@ -34,7 +34,7 @@ public partial class StirlingLabsTestRunner : ITestExecutor2
                 if (firstParamType == typeof(TextWriter))
                     return TestRunnerWithLogger;
 
-                if (firstParamType != typeof(CancellationToken))
+                if (firstParamType == typeof(CancellationToken))
                     return TestRunnerWithCancellation;
 
                 throw new NotImplementedException();

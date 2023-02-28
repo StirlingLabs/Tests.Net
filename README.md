@@ -25,22 +25,22 @@ namespace MyProject.Tests
             // OneTimeSetUp equivalent
         }
 
-        public void MyTest()
+        public void MyTest1()
         {
             // test code
         }
 
-        public void MyTest(TextWriter logger)
+        public void MyTest2(TextWriter logger)
         {
             // test code with logging
         }
 
-        public void MyTest(CancellationToken cancellationToken)
+        public void MyTest3(CancellationToken cancellationToken)
         {
             // test code with cancellation
         }
 
-        public void MyTest(TextWriter logger, CancellationToken cancellationToken)
+        public void MyTest4(TextWriter logger, CancellationToken cancellationToken)
         {
             // test code with logging and cancellation
         }
@@ -49,6 +49,8 @@ namespace MyProject.Tests
 ```
 
 Note that the parameters must be in the order specified, and may not be out of order.
+
+The test method names must also be unique within the class. If you have multiple tests with the same name, you will get an error related to ambiguous method naming.
 
 You can then run your tests using the built-in test runner, like this:
 
