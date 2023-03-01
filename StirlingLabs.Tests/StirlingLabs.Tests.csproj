@@ -7,10 +7,12 @@
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <OutputType>Library</OutputType>
         <AssemblyName>StirlingLabs.TestAdapter</AssemblyName>
+        <PackageId>StirlingLabs.Tests</PackageId>
         <Configuration>Release</Configuration>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <PackageOutputPath>../artifacts</PackageOutputPath>
         <IsTestProject>false</IsTestProject>
+        <NoWarn>NU5100</NoWarn>
     </PropertyGroup>
 
     <ItemGroup>
