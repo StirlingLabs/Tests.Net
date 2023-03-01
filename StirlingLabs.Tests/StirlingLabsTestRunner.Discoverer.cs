@@ -38,6 +38,8 @@ public sealed partial class StirlingLabsTestRunner : ITestDiscoverer
     public void DiscoverTests(IEnumerable<string>? containers, IDiscoveryContext? discoveryContext, IMessageLogger? logger, ITestCaseDiscoverySink discoverySink)
     {
         if (containers is null) return;
+        // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
+        if (discoverySink is null) return;
 
         var alc = new AssemblyLoadContext("StirlingLabsTestDiscoverer", true);
         foreach (string container in containers)

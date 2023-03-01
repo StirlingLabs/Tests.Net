@@ -22,8 +22,11 @@ public partial class StirlingLabsTestRunner
 
         var fp = PrepareMethodAndGetPointer(mi, fw, tc);
 
+        if (fp == default)
+            return;
+
         var failed = false;
-        var sw = new StringWriter();
+        using var sw = new StringWriter();
 
         SyncTimestampBoundary();
         
@@ -48,6 +51,7 @@ public partial class StirlingLabsTestRunner
             failed = true;
             ReportTestOperationCancelledException(started, ended, startedTs, endedTs, fw, tc, ex, sw);
         }
+#pragma warning disable CA1031
         catch (Exception ex)
         {
             if (fw is null)
@@ -59,6 +63,7 @@ public partial class StirlingLabsTestRunner
             failed = true;
             ReportTestException(started, ended, startedTs, endedTs, fw, tc, ex, sw);
         }
+#pragma warning restore CA1031
 
         // ReSharper disable once InvertIf // naming collisions
         if (!failed)
@@ -89,8 +94,11 @@ public partial class StirlingLabsTestRunner
 
         var fp = PrepareMethodAndGetPointer(mi, fw, tc);
 
+        if (fp == default)
+            return;
+
         var failed = false;
-        var sw = new StringWriter();
+        using var sw = new StringWriter();
 
         SyncTimestampBoundary();
 
@@ -115,6 +123,7 @@ public partial class StirlingLabsTestRunner
             failed = true;
             ReportTestOperationCancelledException(started, ended, startedTs, endedTs, fw, tc, ex, sw);
         }
+#pragma warning disable CA1031
         catch (Exception ex)
         {
             if (fw is null)
@@ -126,6 +135,7 @@ public partial class StirlingLabsTestRunner
             failed = true;
             ReportTestException(started, ended, startedTs, endedTs, fw, tc, ex, sw);
         }
+#pragma warning restore CA1031
 
         // ReSharper disable once InvertIf // naming collisions
         if (!failed)
@@ -156,8 +166,11 @@ public partial class StirlingLabsTestRunner
 
         var fp = PrepareMethodAndGetPointer(mi, fw, tc);
 
+        if (fp == default)
+            return;
+
         var failed = false;
-        var sw = new StringWriter();
+        using var sw = new StringWriter();
 
         SyncTimestampBoundary();
         
@@ -182,6 +195,7 @@ public partial class StirlingLabsTestRunner
             failed = true;
             ReportTestOperationCancelledException(started, ended, startedTs, endedTs, fw, tc, ex, sw);
         }
+#pragma warning disable CA1031
         catch (Exception ex)
         {
             if (fw is null)
@@ -193,6 +207,7 @@ public partial class StirlingLabsTestRunner
             failed = true;
             ReportTestException(started, ended, startedTs, endedTs, fw, tc, ex, sw);
         }
+#pragma warning restore CA1031
 
         // ReSharper disable once InvertIf // naming collisions
         if (!failed)
@@ -223,8 +238,11 @@ public partial class StirlingLabsTestRunner
 
         var fp = PrepareMethodAndGetPointer(mi, fw, tc);
 
+        if (fp == default)
+            return;
+
         var failed = false;
-        var sw = new StringWriter();
+        using var sw = new StringWriter();
         
         SyncTimestampBoundary();
 
@@ -249,6 +267,7 @@ public partial class StirlingLabsTestRunner
             failed = true;
             ReportTestOperationCancelledException(started, ended, startedTs, endedTs, fw, tc, ex, sw);
         }
+#pragma warning disable CA1031
         catch (Exception ex)
         {
             if (fw is null)
@@ -260,6 +279,7 @@ public partial class StirlingLabsTestRunner
             failed = true;
             ReportTestException(started, ended, startedTs, endedTs, fw, tc, ex, sw);
         }
+#pragma warning restore CA1031
 
         // ReSharper disable once InvertIf // naming collisions
         if (!failed)
