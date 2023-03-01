@@ -10,6 +10,7 @@
         <Configuration>Release</Configuration>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <PackageOutputPath>../artifacts</PackageOutputPath>
+        <IsTestProject>false</IsTestProject>
     </PropertyGroup>
 
     <ItemGroup>
