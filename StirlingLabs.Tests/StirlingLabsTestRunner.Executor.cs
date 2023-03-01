@@ -369,11 +369,15 @@ public partial class StirlingLabsTestRunner : ITestExecutor2
         var ts = Stopwatch.GetTimestamp();
         while (Stopwatch.GetTimestamp() == ts)
         {
+#if NET7_0_OR_GREATER
             if (X86Base.IsSupported)
                 X86Base.Pause();
             else if (ArmBase.IsSupported)
                 ArmBase.Yield();
             else throw new NotImplementedException();
+#else
+            Thread.SpinWait(1);
+#endif
         }
     }
 

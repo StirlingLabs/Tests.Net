@@ -4,17 +4,28 @@
 [DefaultExecutorUri(UriString)]
 public sealed partial class StirlingLabsTestRunner : ITestDiscoverer
 {
+    [RegexPattern]
+    private const string TestMethodDisplayNameRegexPattern
+        = /*language=regex*/ @"_|\\u[0-9A-Fa-f]{4,4}";
 
+#if NET7_0_OR_GREATER
     [GeneratedRegex(
-        @"_|\\u[0-9A-Fa-f]{4,4}",
+        TestMethodDisplayNameRegexPattern,
         RegexOptions.CultureInvariant
         | RegexOptions.ExplicitCapture
     )]
-    private static partial Regex TestMethodDisplayNameRegex();
+    private static partial Regex GetTestMethodDisplayNameRegex();
+    private static Regex TestMethodDisplayNameRegex => GetTestMethodDisplayNameRegex();
+#else
+    private static Regex TestMethodDisplayNameRegex { get; }
+        = new(TestMethodDisplayNameRegexPattern,
+            RegexOptions.CultureInvariant
+            | RegexOptions.ExplicitCapture
+            | RegexOptions.Compiled);
+#endif
 
     private static string GetTestMethodDisplayName(MethodInfo method)
-        => TestMethodDisplayNameRegex().Replace(method.Name, static v =>
-        {
+        => TestMethodDisplayNameRegex.Replace(method.Name, static v => {
             if (v.ValueSpan[0] == '_')
             {
                 return " ";
@@ -35,7 +46,8 @@ public sealed partial class StirlingLabsTestRunner : ITestDiscoverer
     /// <param name="discoveryContext">Context in which discovery is being performed.</param>
     /// <param name="logger">Logger used to log messages.</param>
     /// <param name="discoverySink">Used to send testcases and discovery related events back to Discoverer manager.</param>
-    public void DiscoverTests(IEnumerable<string>? containers, IDiscoveryContext? discoveryContext, IMessageLogger? logger, ITestCaseDiscoverySink discoverySink)
+    public void DiscoverTests(IEnumerable<string>? containers, IDiscoveryContext? discoveryContext, IMessageLogger? logger,
+        ITestCaseDiscoverySink discoverySink)
     {
         if (containers is null) return;
         // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
@@ -84,8 +96,7 @@ public sealed partial class StirlingLabsTestRunner : ITestDiscoverer
             case 0:
                 // this works just fine
                 break;
-            case 1:
-            {
+            case 1: {
                 var firstParamType = methodParams[0].ParameterType;
                 if (firstParamType != typeof(TextWriter)
                     && firstParamType != typeof(CancellationToken))
@@ -93,8 +104,7 @@ public sealed partial class StirlingLabsTestRunner : ITestDiscoverer
 
                 break;
             }
-            case 2:
-            {
+            case 2: {
                 if (methodParams[0].ParameterType != typeof(TextWriter)
                     || methodParams[1].ParameterType != typeof(CancellationToken))
                     return false;
@@ -106,5 +116,4 @@ public sealed partial class StirlingLabsTestRunner : ITestDiscoverer
 
         return true;
     }
-
 }

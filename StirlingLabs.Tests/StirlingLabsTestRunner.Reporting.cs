@@ -22,7 +22,7 @@ public partial class StirlingLabsTestRunner
         }
 #pragma warning restore CA1031
 
-        var elapsed = Stopwatch.GetElapsedTime(startedTs, endedTs);
+        var elapsed = new TimeSpan((endedTs - startedTs) * Stopwatch.Frequency);
         fw.RecordResult(new(tc)
         {
             Outcome = TestOutcome.Skipped,
@@ -60,7 +60,7 @@ public partial class StirlingLabsTestRunner
         }
 #pragma warning restore CA1031
 
-        var elapsed = Stopwatch.GetElapsedTime(startedTs, endedTs);
+        var elapsed = new TimeSpan((endedTs - startedTs) * Stopwatch.Frequency);
         var isInconclusive = exTypeName.Contains("Inconclusive", StringComparison.Ordinal);
         var isSkipped = isInconclusive || exTypeName.Contains("Skipped", StringComparison.Ordinal)
             || exTypeName.Contains("SkipTest", StringComparison.Ordinal)
@@ -86,7 +86,7 @@ public partial class StirlingLabsTestRunner
     private static void ReportSuccess(DateTimeOffset started, DateTimeOffset ended, long startedTs, long endedTs, IFrameworkHandle fw,
         TestCase tc, StringWriter sw)
     {
-        var elapsed = Stopwatch.GetElapsedTime(startedTs, endedTs);
+        var elapsed = new TimeSpan((endedTs - startedTs) * Stopwatch.Frequency);
         fw.RecordResult(new(tc)
         {
             Outcome = TestOutcome.Passed,
