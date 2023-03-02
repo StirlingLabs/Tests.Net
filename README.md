@@ -9,7 +9,8 @@ StirlingLabs.Tests is a lightweight test framework built for simplicity. It's de
 * No need for attributes or class decorations
 * Injection of `this` pointer, `TextWriter` for logging, and `CancellationToken` for test cancellation signal via method parameters
 * Classes must be sealed and in a namespace that ends with `.Tests` or have a class name that ends with `Tests`
-* Class constructors act as `OneTimeSetUp` equivalents
+* Class default constructors act as `SetUp` equivalents
+* Static class constructors act as `OneTimeSetUp` equivalents
 
 ## Getting Started
 
@@ -20,9 +21,14 @@ namespace MyProject.Tests
 {
     public sealed class MyTests
     {
-        public MyTests()
+        static MyTests()
         {
             // OneTimeSetUp equivalent
+        }
+
+        public MyTests()
+        {
+            // SetUp equivalent
         }
 
         public void MyTest1()

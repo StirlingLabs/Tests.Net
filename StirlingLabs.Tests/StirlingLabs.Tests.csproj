@@ -27,10 +27,6 @@
     </ImportGroup>
 
     <ItemGroup>
-        <None Include="StirlingLabs.Tests.props">
-            <Pack>true</Pack>
-            <PackagePath>build;buildCrossTargeting</PackagePath>
-        </None>
         <None Include="StirlingLabs.Tests.targets">
             <Pack>true</Pack>
             <PackagePath>build;buildCrossTargeting</PackagePath>

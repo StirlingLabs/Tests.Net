@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project>
     <Target Name="_CopyStirlingLabsTestAdapter" BeforeTargets="_CopyFilesMarkedCopyLocal">
+        <Error Text="You must add a package reference to Microsoft.NET.Test.Sdk in your project to use the StirlingLabs.Tests package."
+               Condition="'@(PackageReference->WithMetadataValue('Identity','Microsoft.NET.Test.Sdk'))'==''"/>
         <ItemGroup>
             <ReferenceCopyLocalPaths Include="@(Reference->WithMetadataValue('Filename', 'StirlingLabs.TestAdapter'))"/>
         </ItemGroup>
