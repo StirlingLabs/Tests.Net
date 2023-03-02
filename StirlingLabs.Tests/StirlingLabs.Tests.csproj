@@ -26,4 +26,11 @@
         <Import Project="../Version.proj" />
     </ImportGroup>
 
+    <ItemGroup>
+        <None Include="StirlingLabs.Tests.targets">
+            <Pack>true</Pack>
+            <PackagePath>build;buildCrossTargeting</PackagePath>
+        </None>
+    </ItemGroup>
+
 </Project>
