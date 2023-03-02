@@ -18,8 +18,8 @@
     <ItemGroup>
         <PackageReference Include="JetBrains.Annotations" Version="2022.3.1" PrivateAssets="All" />
         <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.4.0" />
-        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.4.1" />
-        <PackageReference Include="Microsoft.TestPlatform.ObjectModel" Version="17.4.1" />
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.5.0" />
+        <PackageReference Include="Microsoft.TestPlatform.ObjectModel" Version="17.5.0" />
     </ItemGroup>
 
     <ImportGroup>
@@ -27,6 +27,10 @@
     </ImportGroup>
 
     <ItemGroup>
+        <None Include="StirlingLabs.Tests.props">
+            <Pack>true</Pack>
+            <PackagePath>build;buildCrossTargeting</PackagePath>
+        </None>
         <None Include="StirlingLabs.Tests.targets">
             <Pack>true</Pack>
             <PackagePath>build;buildCrossTargeting</PackagePath>
