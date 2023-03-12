@@ -1,20 +1,36 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net7.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <OutputType>Library</OutputType>
         <AssemblyName>StirlingLabs.TestAdapter</AssemblyName>
+        <PackageId>StirlingLabs.Tests</PackageId>
         <Configuration>Release</Configuration>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <PackageOutputPath>../artifacts</PackageOutputPath>
+        <IsTestProject>false</IsTestProject>
+        <NoWarn>NU5100</NoWarn>
+        <TargetFrameworks>net6.0;net7.0</TargetFrameworks>
     </PropertyGroup>
 
     <ItemGroup>
         <PackageReference Include="JetBrains.Annotations" Version="2022.3.1" PrivateAssets="All" />
-        <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.4.0" />
-        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.4.1" />
-        <PackageReference Include="Microsoft.TestPlatform.ObjectModel" Version="17.4.1" />
+        <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.5.0" />
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.5.0" />
+        <PackageReference Include="Microsoft.TestPlatform.ObjectModel" Version="17.5.0" />
+    </ItemGroup>
+
+    <ImportGroup>
+        <Import Project="../Version.proj" />
+    </ImportGroup>
+
+    <ItemGroup>
+        <None Include="StirlingLabs.Tests.targets">
+            <Pack>true</Pack>
+            <PackagePath>build;buildCrossTargeting</PackagePath>
+        </None>
     </ItemGroup>
 
 </Project>

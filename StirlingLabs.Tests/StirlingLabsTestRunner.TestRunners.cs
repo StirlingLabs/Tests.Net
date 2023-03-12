@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System.Collections.Concurrent;
+using System.Diagnostics;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 
@@ -6,13 +7,14 @@ namespace StirlingLabs.Tests;
 
 public partial class StirlingLabsTestRunner
 {
-
     [MethodImpl(MethodImplOptions.NoInlining | MethodImplOptions.AggressiveOptimization)]
     [StackTraceHidden, DebuggerStepThrough, DebuggerHidden, DebuggerNonUserCode]
     private static unsafe void TestRunner(object? o)
     {
+        NotifyExecutingFromTestFrameworkThread();
         var (mi, fw, tc, jobClass, ct)
-            = ((MethodInfo, IFrameworkHandle?, TestCase, Type, CancellationToken))o!;
+            = Unsafe.Unbox<(MethodInfo, IFrameworkHandle?, TestCase, Type, CancellationToken)>(o!);
+        
 
         var thread = Thread.CurrentThread;
         thread.Name = $"Test: {tc.FullyQualifiedName}";
@@ -22,11 +24,14 @@ public partial class StirlingLabsTestRunner
 
         var fp = PrepareMethodAndGetPointer(mi, fw, tc);
 
+        if (fp == default)
+            return;
+
         var failed = false;
-        var sw = new StringWriter();
+        using var sw = new StringWriter();
 
         SyncTimestampBoundary();
-        
+
         fw?.RecordStart(tc);
         DateTimeOffset started = default;
         long startedTs = default;
@@ -48,6 +53,7 @@ public partial class StirlingLabsTestRunner
             failed = true;
             ReportTestOperationCancelledException(started, ended, startedTs, endedTs, fw, tc, ex, sw);
         }
+#pragma warning disable CA1031
         catch (Exception ex)
         {
             if (fw is null)
@@ -59,6 +65,7 @@ public partial class StirlingLabsTestRunner
             failed = true;
             ReportTestException(started, ended, startedTs, endedTs, fw, tc, ex, sw);
         }
+#pragma warning restore CA1031
 
         // ReSharper disable once InvertIf // naming collisions
         if (!failed)
@@ -72,14 +79,30 @@ public partial class StirlingLabsTestRunner
 
             ReportSuccess(started, ended, startedTs, endedTs, fw, tc, sw);
         }
+
+        if (inst is not IDisposable)
+            return;
+
+        try
+        {
+            var disposeMethod = GetDisposeFunctionPointer(inst);
+            ((delegate * <object, void>)disposeMethod)(inst);
+        }
+#pragma warning disable CA1031
+        catch (Exception ex)
+        {
+            ReportDisposalFailure(tc, fw, ex);
+        }
+#pragma warning restore CA1031
     }
 
     [MethodImpl(MethodImplOptions.NoInlining | MethodImplOptions.AggressiveOptimization)]
     [StackTraceHidden, DebuggerStepThrough, DebuggerHidden, DebuggerNonUserCode]
     private static unsafe void TestRunnerWithLogger(object? o)
     {
+        NotifyExecutingFromTestFrameworkThread();
         var (mi, fw, tc, jobClass, ct)
-            = ((MethodInfo, IFrameworkHandle?, TestCase, Type, CancellationToken))o!;
+            = Unsafe.Unbox<(MethodInfo, IFrameworkHandle?, TestCase, Type, CancellationToken)>(o!);
 
         var thread = Thread.CurrentThread;
         thread.Name = $"{tc.FullyQualifiedName}";
@@ -89,8 +112,11 @@ public partial class StirlingLabsTestRunner
 
         var fp = PrepareMethodAndGetPointer(mi, fw, tc);
 
+        if (fp == default)
+            return;
+
         var failed = false;
-        var sw = new StringWriter();
+        using var sw = new StringWriter();
 
         SyncTimestampBoundary();
 
@@ -115,6 +141,7 @@ public partial class StirlingLabsTestRunner
             failed = true;
             ReportTestOperationCancelledException(started, ended, startedTs, endedTs, fw, tc, ex, sw);
         }
+#pragma warning disable CA1031
         catch (Exception ex)
         {
             if (fw is null)
@@ -126,6 +153,7 @@ public partial class StirlingLabsTestRunner
             failed = true;
             ReportTestException(started, ended, startedTs, endedTs, fw, tc, ex, sw);
         }
+#pragma warning restore CA1031
 
         // ReSharper disable once InvertIf // naming collisions
         if (!failed)
@@ -139,14 +167,30 @@ public partial class StirlingLabsTestRunner
 
             ReportSuccess(started, ended, startedTs, endedTs, fw, tc, sw);
         }
+
+        if (inst is not IDisposable)
+            return;
+
+        try
+        {
+            var disposeMethod = GetDisposeFunctionPointer(inst);
+            ((delegate * <object, void>)disposeMethod)(inst);
+        }
+#pragma warning disable CA1031
+        catch (Exception ex)
+        {
+            ReportDisposalFailure(tc, fw, ex);
+        }
+#pragma warning restore CA1031
     }
 
     [MethodImpl(MethodImplOptions.NoInlining | MethodImplOptions.AggressiveOptimization)]
     [StackTraceHidden, DebuggerStepThrough, DebuggerHidden, DebuggerNonUserCode]
     private static unsafe void TestRunnerWithCancellation(object? o)
     {
+        NotifyExecutingFromTestFrameworkThread();
         var (mi, fw, tc, jobClass, ct)
-            = ((MethodInfo, IFrameworkHandle?, TestCase, Type, CancellationToken))o!;
+            = Unsafe.Unbox<(MethodInfo, IFrameworkHandle?, TestCase, Type, CancellationToken)>(o!);
 
         var thread = Thread.CurrentThread;
         thread.Name = $"Test: {tc.FullyQualifiedName}";
@@ -156,11 +200,14 @@ public partial class StirlingLabsTestRunner
 
         var fp = PrepareMethodAndGetPointer(mi, fw, tc);
 
+        if (fp == default)
+            return;
+
         var failed = false;
-        var sw = new StringWriter();
+        using var sw = new StringWriter();
 
         SyncTimestampBoundary();
-        
+
         fw?.RecordStart(tc);
         DateTimeOffset started = default;
         long startedTs = default;
@@ -182,6 +229,7 @@ public partial class StirlingLabsTestRunner
             failed = true;
             ReportTestOperationCancelledException(started, ended, startedTs, endedTs, fw, tc, ex, sw);
         }
+#pragma warning disable CA1031
         catch (Exception ex)
         {
             if (fw is null)
@@ -193,6 +241,7 @@ public partial class StirlingLabsTestRunner
             failed = true;
             ReportTestException(started, ended, startedTs, endedTs, fw, tc, ex, sw);
         }
+#pragma warning restore CA1031
 
         // ReSharper disable once InvertIf // naming collisions
         if (!failed)
@@ -206,14 +255,30 @@ public partial class StirlingLabsTestRunner
 
             ReportSuccess(started, ended, startedTs, endedTs, fw, tc, sw);
         }
+
+        if (inst is not IDisposable)
+            return;
+
+        try
+        {
+            var disposeMethod = GetDisposeFunctionPointer(inst);
+            ((delegate * <object, void>)disposeMethod)(inst);
+        }
+#pragma warning disable CA1031
+        catch (Exception ex)
+        {
+            ReportDisposalFailure(tc, fw, ex);
+        }
+#pragma warning restore CA1031
     }
 
     [MethodImpl(MethodImplOptions.NoInlining | MethodImplOptions.AggressiveOptimization)]
     [StackTraceHidden, DebuggerStepThrough, DebuggerHidden, DebuggerNonUserCode]
     private static unsafe void TestRunnerWithLoggerAndCancellation(object? o)
     {
+        NotifyExecutingFromTestFrameworkThread();
         var (mi, fw, tc, jobClass, ct)
-            = ((MethodInfo, IFrameworkHandle?, TestCase, Type, CancellationToken))o!;
+            = Unsafe.Unbox<(MethodInfo, IFrameworkHandle?, TestCase, Type, CancellationToken)>(o!);
 
         var thread = Thread.CurrentThread;
         thread.Name = $"Test: {tc.FullyQualifiedName}";
@@ -223,9 +288,12 @@ public partial class StirlingLabsTestRunner
 
         var fp = PrepareMethodAndGetPointer(mi, fw, tc);
 
+        if (fp == default)
+            return;
+
         var failed = false;
-        var sw = new StringWriter();
-        
+        using var sw = new StringWriter();
+
         SyncTimestampBoundary();
 
         fw?.RecordStart(tc);
@@ -249,6 +317,7 @@ public partial class StirlingLabsTestRunner
             failed = true;
             ReportTestOperationCancelledException(started, ended, startedTs, endedTs, fw, tc, ex, sw);
         }
+#pragma warning disable CA1031
         catch (Exception ex)
         {
             if (fw is null)
@@ -260,6 +329,7 @@ public partial class StirlingLabsTestRunner
             failed = true;
             ReportTestException(started, ended, startedTs, endedTs, fw, tc, ex, sw);
         }
+#pragma warning restore CA1031
 
         // ReSharper disable once InvertIf // naming collisions
         if (!failed)
@@ -273,6 +343,33 @@ public partial class StirlingLabsTestRunner
 
             ReportSuccess(started, ended, startedTs, endedTs, fw, tc, sw);
         }
+
+        if (inst is not IDisposable)
+            return;
+
+        try
+        {
+            var disposeMethod = GetDisposeFunctionPointer(inst);
+            ((delegate * <object, void>)disposeMethod)(inst);
+        }
+#pragma warning disable CA1031
+        catch (Exception ex)
+        {
+            ReportDisposalFailure(tc, fw, ex);
+        }
+#pragma warning restore CA1031
     }
 
+
+    private static readonly ConcurrentDictionary<Type, nint> DisposeMethodPointers = new();
+    private static nint GetDisposeFunctionPointer(object inst)
+        => GetDisposeFunctionPointer(inst.GetType());
+
+    private static nint GetDisposeFunctionPointer(Type disposableType)
+        => DisposeMethodPointers.GetOrAdd(disposableType, static disposableType => {
+            var map = disposableType.GetInterfaceMap(typeof(IDisposable));
+            var m = Array.FindIndex(map.InterfaceMethods, x => x.Name == "Dispose");
+            var disposeMethod = map.TargetMethods[m].MethodHandle.GetFunctionPointer();
+            return disposeMethod;
+        });
 }
